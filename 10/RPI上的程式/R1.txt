@@ -1,0 +1,194 @@
+//this is R2 robot Arduino program
+#include <Servo.h>
+/*****************************************
+ * 夾爪開啟角度 = 
+ * 夾爪夾取牛奶瓶角度=
+ * 夾爪夾取鐵罐角度=
+ * 夾爪夾取紙箱角度=
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+String str;
+
+#define jaw 53 //夾爪51號pin
+#define cam1 38 //camera 軸1 22號pin
+#define cam2 36 //camera 軸2 24號pin
+#define linearA 13 //線性致動器 13號pin 上升下降未知
+#define linearB 12 //線性致動器 12號pin 上升下降未知
+#define infrared_r 2 //紅外線收 未裝置
+#define infrared_t 1 //紅外線發 未裝置
+
+Servo camservo1 ;
+Servo camservo2 ; 
+Servo jawservo ; 
+int cam1_deg=90;
+int cam2_deg=50;
+int jaw_deg = 100;
+void setup() {
+  //setup camera servo pin 
+  Serial.begin(9600);
+camservo1.attach(cam1);
+camservo2.attach(cam2);
+//setup jaw servo pin
+jawservo.attach(jaw);
+//setup linear output pin
+pinMode(linearA, OUTPUT);
+pinMode(linearB, OUTPUT);
+
+
+}
+
+void loop() {
+  jawservo.write(jaw_deg);
+  camservo1.write(cam1_deg);
+  camservo2.write(cam2_deg);
+  str=Serial.readStringUntil('\n');
+    if(str == "a"){
+      openjaw();
+      
+    }
+else if(str == "b"){
+      catch_bottle();
+      
+    }
+else if (str == "c"){
+      
+      catch_box();}
+else if (str =="d"){
+       catch_can();}
+else if (str =="e"){
+        upper();}
+else if(str == "f"){
+        
+       downer();}
+else if(str =="h"){
+  zone1();
+}
+else if(str =="i"){
+  zone2();
+}
+else if(str =="j"){
+  zone3();
+}
+else if(str =="k"){
+  zone4();
+}
+else if(str =="l"){
+  zone5();
+}
+else if(str =="g"){
+  zone6();
+}
+else if (str =="m"){
+  stoplinear();}
+  
+else if (str == "n"){
+  camera_axis1_add();
+}
+else if(str =="o"){
+  camera_axis1_min();
+}
+else if(str=="p"){
+  camera_axis2_add();
+}
+else if(str == "q"){
+  camera_axis2_min();
+}
+else if(str == "r"){
+  reset_cam();
+}
+         
+        
+       
+    
+  
+ //downer();
+ //delay(10);
+// openjaw();
+ //catch_bottle();
+ //upper();
+  // put your main code here, to run repeatedly:
+ // if (Serial.available()) {
+
+//  }
+
+
+}
+void openjaw(){
+//傳入code 代號a
+
+jaw_deg = 130;
+
+}
+void catch_bottle(){
+
+ jaw_deg=79;
+}
+void catch_box(){
+  jaw_deg=60;
+}
+void catch_can(){
+  jaw_deg=43;
+  }
+void upper(){
+  digitalWrite(linearA,HIGH);
+  digitalWrite(linearB,LOW);
+  
+}
+
+void downer(){
+  
+  digitalWrite(linearB,HIGH);
+  digitalWrite(linearA,LOW);
+  
+}
+void camera_axis1_add(){
+  cam1_deg=cam1_deg+1;
+}
+void camera_axis1_min(){
+  cam1_deg=cam1_deg-1;
+}
+void camera_axis2_add(){
+  cam2_deg=cam2_deg+10;
+}
+void camera_axis2_min(){
+  cam2_deg=cam2_deg-10;
+}
+void stoplinear(){
+    digitalWrite(linearB,LOW);
+  digitalWrite(linearA,LOW);
+}
+ void zone1(){
+    cam1_deg=84;
+   cam2_deg=50;
+ }
+  void zone2(){
+    cam1_deg=26;
+   cam2_deg=50;
+ }
+  void zone3(){
+    cam1_deg=160;
+   cam2_deg=50;
+ }
+  void zone4(){
+    cam1_deg=90;
+   cam2_deg=110;
+ }
+  void zone5(){
+    cam1_deg=90;
+   cam2_deg=110;
+ }
+ void reset_cam(){
+    cam1_deg=90;
+   cam2_deg=50;
+   
+ }
+  void zone6(){
+    cam1_deg=90;
+   cam2_deg=60;
+ }
